@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Manage Family Members') }}
+            {{ __('Manage Family Members') }} - {{ $family->name }}
         </h2>
     </x-slot>
 
@@ -9,6 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                    <h3 class="text-lg font-bold mb-4">Family Name: {{ $family->name }}</h3>
                     <h3 class="text-lg font-bold mb-4">Pending Members</h3>
                     @if($pendingMembers->isEmpty())
                     <p>No pending requests.</p>
@@ -48,6 +49,15 @@
                         @endforeach
                     </ul>
                     @endif
+
+                    <div class="mt-6">
+                        <form action="{{ route('families.destroy', ['id' => $family->id]) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete Family</button>
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </div>

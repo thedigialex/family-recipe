@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('serving_size');
             $table->text('cook_time');
+            $table->text('ingredients');
             $table->text('description');
             $table->text('instructions');
             $table->string('image_path')->nullable();

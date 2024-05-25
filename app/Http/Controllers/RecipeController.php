@@ -43,6 +43,7 @@ class RecipeController extends Controller
             'title' => 'required',
             'serving_size' => 'required',
             'cook_time' => 'required',
+            'ingredients' => 'required',
             'description' => 'required',
             'instructions' => 'required',
             'family_id' => 'required|exists:families,id',
@@ -58,6 +59,7 @@ class RecipeController extends Controller
             'title' => $request->title,
             'serving_size' => $request->serving_size,
             'cook_time' => $request->cook_time,
+            'ingredients' => $request->ingredients,
             'description' => $request->description,
             'instructions' => $request->instructions,
             'image_path' => $imagePath,
@@ -82,6 +84,7 @@ class RecipeController extends Controller
             'title' => 'required',
             'serving_size' => 'required',
             'cook_time' => 'required',
+            'ingredients' => 'required',
             'description' => 'required',
             'instructions' => 'required',
             'family_id' => 'required|exists:families,id',
@@ -97,6 +100,7 @@ class RecipeController extends Controller
             'title' => $request->title,
             'serving_size' => $request->serving_size,
             'cook_time' => $request->cook_time,
+            'ingredients' => $request->ingredients,
             'description' => $request->description,
             'instructions' => $request->instructions,
             'image_path' => $imagePath,
@@ -104,5 +108,20 @@ class RecipeController extends Controller
         ]);
 
         return redirect()->route('recipes.index')->with('success', 'Recipe updated successfully.');
+    }
+
+    public function destroy(Recipe $recipe)
+    {
+        if ($recipe->user_id != Auth::id()) {
+            return redirect()->route('recipes.index')->with('error', 'You are not authorized to delete this recipe.');
+        }
+
+        if ($recipe->image_path) {
+            \Storage::disk('public')->delete($recipe->image_path);
+        }
+
+        $recipe->delete();
+
+        return redirect()->route('recipes.index')->with('success', 'Recipe deleted successfully.');
     }
 }

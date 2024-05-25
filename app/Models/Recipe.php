@@ -13,10 +13,11 @@ class Recipe extends Model
         'title', 
         'serving_size', 
         'cook_time', 
-        'description', 
         'instructions', 
+        'ingredients',
         'image_path', 
         'user_id', 
+        'description', 
         'family_id'
     ];
 

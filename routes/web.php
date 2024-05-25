@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('families/{familyId}/manage', [FamilyController::class, 'manageMembers'])->name('families.manage');
     Route::post('families/{familyId}/approve/{userId}', [FamilyController::class, 'approveMember'])->name('families.approve');
     Route::post('families/{familyId}/remove/{userId}', [FamilyController::class, 'removeMember'])->name('families.remove');
+    Route::delete('/families/{id}', [FamilyController::class, 'destroy'])->name('families.destroy');
 
     Route::get('recipes', [RecipeController::class, 'index'])->name('recipes.index');
     Route::get('recipes/create', [RecipeController::class, 'create'])->name('recipes.create');
@@ -33,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('recipes/{recipe}/edit', [RecipeController::class, 'edit'])->name('recipes.edit');
     Route::put('recipes/{recipe}', [RecipeController::class, 'update'])->name('recipes.update');
     Route::get('recipes/{recipe}', [RecipeController::class, 'show'])->name('recipes.show');
+    Route::delete('/recipes/{recipe}', [RecipeController::class, 'destroy'])->name('recipes.destroy');
 });
 
 

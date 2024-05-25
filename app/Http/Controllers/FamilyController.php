@@ -26,7 +26,7 @@ class FamilyController extends Controller
 
         $family->members()->attach(Auth::id(), ['approved' => true]);
 
-        return redirect()->route('dashboard')->with('success', 'Family created successfully.');
+        return redirect()->route('recipes.index')->with('success', 'Family created successfully.');
     }
 
     public function showJoinForm()
@@ -100,5 +100,20 @@ class FamilyController extends Controller
         $family->members()->detach($userId);
 
         return redirect()->route('families.manage', $familyId)->with('success', 'Member removed successfully.');
+    }
+
+    public function destroy($familyId)
+    {
+        $family = Family::findOrFail($familyId);
+
+        if ($family->head_id != Auth::id()) {
+            return redirect()->route('home')->with('error', 'You are not authorized to delete this family.');
+        }
+
+        $family->members()->detach();
+
+        $family->delete();
+
+        return redirect()->route('recipes.index')->with('success', 'Family deleted successfully.');
     }
 }
