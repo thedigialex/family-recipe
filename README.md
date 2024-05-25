@@ -24,7 +24,7 @@ Family Recipe Management is a Laravel-based web application that allows users to
 
 1. **Clone the repository**:
     ```sh
-    git clone https://github.com/yourusername/family-recipe-management.git
+    git clone https://github.com/thedigialex/family-recipe-management.git
     cd family-recipe-management
     ```
 
