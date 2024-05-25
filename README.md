@@ -77,10 +77,6 @@ Family Recipe Management is a Laravel-based web application that allows users to
 - Recipes are displayed in interactive cards with a flip effect on hover.
 - Detailed view of each recipe includes image, title, serving size, cook time, ingredients, steps, and description.
 
-## Screenshots
-
-![Recipe Show View](path/to/your/image.png)
-
 ## Contributing
 
 We welcome contributions! Please read the [contributing guidelines](CONTRIBUTING.md) for more details.
