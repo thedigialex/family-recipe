@@ -24,27 +24,24 @@
         height: 100%;
         backface-visibility: hidden;
         border-radius: 0.75rem;
-        /* Tailwind's rounded-lg */
     }
 
     .flip-card-back {
         transform: rotateY(180deg);
-        background-color: #f8fafc;
-        /* Tailwind's gray-100 */
     }
 </style>
 
-<div class="flip-card w-full h-80 border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+<div class="flip-card w-full h-80 rounded-lg overflow-hidden duration-300">
     <div class="flip-card-inner">
-        <div class="flip-card-front bg-white">
+        <div class="flip-card-front bg-backgroundLightAccent">
             @if($recipe->image_path)
             <img src="{{ asset('storage/' . $recipe->image_path) }}" alt="{{ $recipe->title }}" class="w-full h-full object-cover rounded-lg">
             @endif
-            <div class="absolute bottom-0 left-0 w-full bg-white bg-opacity-75 p-4 rounded-b-lg">
+            <div class="absolute bottom-0 left-0 w-full bg-backgroundLightAccent bg-opacity-75 p-4 rounded-b-lg">
                 <h3 class="font-semibold text-lg">{{ $recipe->title }}</h3>
             </div>
         </div>
-        <div class="flip-card-back p-4 flex flex-col justify-between">
+        <div class="flip-card-back p-4 flex flex-col justify-between bg-backgroundLightAccent">
             <div>
                 <h3 class="font-semibold text-lg">{{ $recipe->title }}</h3>
                 <p class="text-sm mt-2">{{ $recipe->description }}</p>
