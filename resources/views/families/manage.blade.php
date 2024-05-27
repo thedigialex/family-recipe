@@ -1,46 +1,47 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2>
             {{ __('Manage Family Members') }} - {{ $family->name }}
         </h2>
     </x-slot>
 
     <x-container>
-        <div class="text-gray-900">
-            <h3 class="text-lg font-bold mb-4">Family Name: {{ $family->name }}</h3>
-            <h3 class="text-lg font-bold mb-4">Pending Members</h3>
+        <div>
+            <h1 class="mb-8">Family Name: {{ $family->name }}</h1>
+            <h2 class="mt-6">Pending Members</h2>
             @if($pendingMembers->isEmpty())
             <p>No pending requests.</p>
             @else
             <ul>
                 @foreach($pendingMembers as $member)
                 <li class="mb-2">
-                    {{ $member->name }}
+                    <h3>{{ $member->name }}</h3>
                     <form action="{{ route('families.approve', ['familyId' => $family->id, 'userId' => $member->id]) }}" method="POST" class="inline">
                         @csrf
-                        <x-primary-button type="submit">Approve</x-primary-button>
+                        <x-secondary-button type="submit">Approve</x-secondary-button>
                     </form>
                     <form action="{{ route('families.remove', ['familyId' => $family->id, 'userId' => $member->id]) }}" method="POST" class="inline">
                         @csrf
-                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Remove</button>
+                        <x-primary-button type="submit">Deny</x-primary-button>
                     </form>
                 </li>
+                </br>
                 @endforeach
             </ul>
             @endif
 
-            <h3 class="text-lg font-bold mt-6 mb-4">Approved Members</h3>
+            <h2 class="mt-6">Approved Members</h2>
             @if($approvedMembers->isEmpty())
             <p>No approved members.</p>
             @else
             <ul>
                 @foreach($approvedMembers as $member)
                 <li class="mb-2">
-                    {{ $member->name }}
+                    <h3> @if($member->id === $family->head_id) <span class="font-bold text-sm text-primary">(Head of Household)</br></span> @endif{{ $member->name }}</h3>
                     @if($member->id !== $family->head_id)
                     <form action="{{ route('families.remove', ['familyId' => $family->id, 'userId' => $member->id]) }}" method="POST" class="inline">
                         @csrf
-                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Remove</button>
+                        <x-primary-button type="submit">Remove</x-primary-button>
                     </form>
                     @endif
                 </li>
@@ -48,7 +49,7 @@
             </ul>
             @endif
 
-            <div class="mt-6">
+            <div class="mt-6 flex justify-end">
                 <form action="{{ route('families.destroy', ['id' => $family->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')

@@ -8,8 +8,10 @@
                         <x-application-logo class="block h-9 w-auto fill-current" />
                     </a>
                 </div>
-
-                <!-- Navigation Links -->
+            </div>
+        </div>
+        <div class="flex justify-between h-16">
+            <div class="flex">
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex items-center">
                     <x-nav-link :href="route('recipes.index')" :active="request()->routeIs('recipes.index')">
                         {{ __('Recipes') }}
@@ -39,7 +41,6 @@
                     @endif
                 </div>
             </div>
-
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">

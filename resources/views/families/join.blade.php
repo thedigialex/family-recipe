@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2>
             {{ __('Join an Existing Family') }}
         </h2>
     </x-slot>
@@ -28,13 +28,9 @@
                 @csrf
                 <div class="mb-4">
                     <label for="family_id" class="block text-gray-700 text-sm font-bold mb-2">Select Family:</label>
-                    <select name="family_id" id="family_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                        @foreach($families as $family)
-                        <option value="{{ $family->id }}">{{ $family->name }}</option>
-                        @endforeach
-                    </select>
+                    <x-select name="family_id" id="family_id" :options="$families->map(fn($family) => ['value' => $family->id, 'text' => $family->name])->toArray()" required />
                 </div>
-                <x-primary-button type="submit">Request to Family</x-primary-button>
+                <x-secondary-button type="submit">Request to Family</x-secondary-button>
             </form>
             @endif
         </div>

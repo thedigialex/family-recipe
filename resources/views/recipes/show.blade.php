@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2>
             {{ $recipe->title }}
         </h2>
     </x-slot>
@@ -46,9 +46,9 @@
             @endif
 
             <div class="mt-6">
-                <x-primary-button>
-                    <a href="{{ route('recipes.edit', $recipe) }}">Edit Recipe</a>
-                </x-primary-button>
+                <x-secondary-button onclick="window.location='{{ route('recipes.edit', $recipe) }}'">
+                    Edit Recipe
+                </x-secondary-button>
             </div>
         </div>
     </x-container>

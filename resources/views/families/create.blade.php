@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2>
             {{ __('Create a New Family') }}
         </h2>
     </x-slot>
@@ -28,7 +28,7 @@
                     <x-text-input type="text" name="name" id="name" required></x-text-input>
                 </div>
 
-                <x-primary-button type="submit">Create Family</x-primary-button>
+                <x-secondary-button type="submit">Create Family</x-secondary-button>
             </form>
         </div>
     </x-container>

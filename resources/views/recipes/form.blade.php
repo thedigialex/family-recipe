@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2>
             {{ $recipe->exists ? __('Edit Recipe') : __('Create Recipe') }}
         </h2>
     </x-slot>
 
     <x-container>
-        <div class="text-gray-900">
+        <div>
             @if(session('success'))
             <div class="alert alert-success mb-4">
                 {{ session('success') }}
@@ -62,22 +62,25 @@
                     @endif
                     <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Recipe Image:</label>
                     <input type="file" name="image" id="image" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-
                 </div>
 
-                <x-primary-button type="submit">
-                    {{ $recipe->exists ? 'Update Recipe' : 'Create Recipe' }}
-                </x-primary-button>
+                <div class="flex items-center space-x-4">
+                    <x-secondary-button type="submit">
+                        {{ $recipe->exists ? 'Update Recipe' : 'Create Recipe' }}
+                    </x-secondary-button>
+                </div>
             </form>
 
             @if($recipe->exists)
-            <form action="{{ route('recipes.destroy', $recipe) }}" method="POST" class="mt-4">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Delete Recipe
-                </button>
-            </form>
+            <div class="flex items-center space-x-4 mt-4">
+                <form action="{{ route('recipes.destroy', $recipe) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this recipe?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Delete Recipe
+                    </button>
+                </form>
+            </div>
             @endif
         </div>
     </x-container>

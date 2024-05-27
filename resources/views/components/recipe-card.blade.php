@@ -38,15 +38,17 @@
             <img src="{{ asset('storage/' . $recipe->image_path) }}" alt="{{ $recipe->title }}" class="w-full h-full object-cover rounded-lg">
             @endif
             <div class="absolute bottom-0 left-0 w-full bg-backgroundLightAccent bg-opacity-75 p-4 rounded-b-lg">
-                <h3 class="font-semibold text-lg">{{ $recipe->title }}</h3>
+                <h3 class="font-semibold">{{ $recipe->title }}</h3>
             </div>
         </div>
         <div class="flip-card-back p-4 flex flex-col justify-between bg-backgroundLightAccent">
             <div>
-                <h3 class="font-semibold text-lg">{{ $recipe->title }}</h3>
-                <p class="text-sm mt-2">{{ $recipe->description }}</p>
+                <h3 class="font-semibold ">{{ $recipe->title }}</h3>
+                <p class=" mt-2">{{ $recipe->description }}</p>
             </div>
-            <a href="{{ route('recipes.show', $recipe) }}" class="text-blue-500 hover:text-blue-700 mt-2 inline-block self-end">View Recipe</a>
+            <x-secondary-button onclick="window.location='{{ route('recipes.show', $recipe) }}'">
+                View Recipe
+            </x-secondary-button>
         </div>
     </div>
 </div>
