@@ -21,7 +21,7 @@
 
                 <div class="mb-4">
                     <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
-                    <x-text-input type="text" name="title" id="title" value="{{ old('title', $recipe->title) }}" required></x-text-input>
+                    <x-inputs.text-input type="text" name="title" id="title" value="{{ old('title', $recipe->title) }}" required></x-inputs.text-input>
                 </div>
 
                 <div class="mb-4">
@@ -37,12 +37,12 @@
 
                     <div class="flex-1">
                         <label for="cook_time" class="block text-gray-700 text-sm font-bold mb-2">Cook Time:</label>
-                        <x-text-input type="text" name="cook_time" id="cook_time" value="{{ old('cook_time', $recipe->cook_time) }}" required></x-text-input>
+                        <x-inputs.text-input type="text" name="cook_time" id="cook_time" value="{{ old('cook_time', $recipe->cook_time) }}" required></x-inputs.text-input>
                     </div>
 
                     <div class="flex-1">
                         <label for="serving_size" class="block text-gray-700 text-sm font-bold mb-2">Serving Size:</label>
-                        <x-text-input type="text" name="serving_size" id="serving_size" value="{{ old('serving_size', $recipe->serving_size) }}" required></x-text-input>
+                        <x-inputs.text-input type="text" name="serving_size" id="serving_size" value="{{ old('serving_size', $recipe->serving_size) }}" required></x-inputs.text-input>
                     </div>
                 </div>
 

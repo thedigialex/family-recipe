@@ -25,7 +25,7 @@
                 @csrf
                 <div class="mb-4">
                     <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Family Name:</label>
-                    <x-text-input type="text" name="name" id="name" required></x-text-input>
+                    <x-inputs.text-input type="text" name="name" id="name" required></x-inputs.text-input>
                 </div>
 
                 <x-secondary-button type="submit">Create Family</x-secondary-button>

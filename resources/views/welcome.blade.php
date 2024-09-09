@@ -13,61 +13,69 @@
 
 <body>
     <div class="flex min-h-screen">
-        <div class="w-1/2 bg-background flex flex-col">
-            <div class="w-full py-4 px-6 text-center flex items-center justify-center">
-                <x-application-logo class="h-12 w-auto mr-4" />
-                <a href="{{ url('/') }}">Recipe.thedigialex.net</a>
+        <div class="w-1/2 bg-backgroundAccent flex flex-col">
+            <div class="w-full py-2 flex items-center justify-center">
+                <x-application-logo class="h-48 w-48 rounded-full" />
             </div>
-
-            <div class="flex flex-col justify-center items-center flex-grow p-8">
-                <h1>Family Recipe Hub</h1>
-                <p>
-                    Sign up to create your family or request to join an existing one.<br>Share and manage your family's favorite recipes all in one place.
-                </p>
-
+            <div class="flex flex-col justify-center items-center flex-grow p-2">
+                <x-fonts.header>Family Recipe Hub</x-fonts.header>
+                <x-fonts.paragraph>
+                    Sign up to create your family or request to join an existing one.<br>
+                    Share and manage your family's favorite recipes all in one place.
+                </x-fonts.paragraph>
                 <div id="form-container" class="w-full max-w-lg">
-                    <div id="login-form" class="block">
+                    <div id="login-form" class="form block">
                         @include('auth.login')
                     </div>
-
-                    <div id="register-form" class="hidden">
+                    <div id="register-form" class="form hidden">
                         @include('auth.register')
                     </div>
-
+                    <div id="forgot-form" class="form hidden">
+                        @include('auth.forgot-password')
+                    </div>
                 </div>
                 <div class="flex space-x-4 mb-8">
                     <x-primary-button id="toggle-button" onclick="toggleForms()">Register</x-primary-button>
+                    <x-primary-button onclick="showForm('forgot-form')">Forgot Password?</x-primary-button>
                 </div>
             </div>
 
             <div class="w-full py-2 px-4 text-center rounded-b-md shadow-md">
-                <p>&copy; TheDigiAlex 2024</p>
+                <x-fonts.paragraph>&copy; TheDigiAlex 2024</x-fonts.paragraph>
             </div>
         </div>
         <div class="w-1/2 bg-cover bg-no-repeat bg-center rounded-r-md shadow-md" style="background-image: url('/login_page_image.jpg');"></div>
     </div>
-
     <script>
-        function toggleForms() {
-            var loginForm = document.getElementById('login-form');
-            var registerForm = document.getElementById('register-form');
-            var toggleButton = document.getElementById('toggle-button');
+    function toggleForms() {
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const toggleButton = document.getElementById('toggle-button');
 
-            if (loginForm.classList.contains('block')) {
-                loginForm.classList.remove('block');
-                loginForm.classList.add('hidden');
-                registerForm.classList.remove('hidden');
-                registerForm.classList.add('block');
-                toggleButton.textContent = 'Login';
-            } else {
-                loginForm.classList.remove('hidden');
-                loginForm.classList.add('block');
-                registerForm.classList.remove('block');
-                registerForm.classList.add('hidden');
-                toggleButton.textContent = 'Register';
-            }
+        // Hide the forgot form if it's shown
+        document.getElementById('forgot-form').classList.add('hidden');
+
+        // Toggle between login and register forms
+        if (loginForm.classList.contains('hidden')) {
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+            toggleButton.textContent = 'Register';
+        } else {
+            loginForm.classList.add('hidden');
+            registerForm.classList.remove('hidden');
+            toggleButton.textContent = 'Login';
         }
-    </script>
+    }
+
+    function showForm(formId) {
+        const forms = document.querySelectorAll('.form');
+        forms.forEach(form => form.classList.add('hidden'));
+
+        const selectedForm = document.getElementById(formId);
+        selectedForm.classList.remove('hidden');
+    }
+</script>
+
 
 </body>
 

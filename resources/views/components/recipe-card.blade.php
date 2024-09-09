@@ -33,15 +33,15 @@
 
 <div class="flip-card w-full h-80 rounded-lg overflow-hidden duration-300">
     <div class="flip-card-inner">
-        <div class="flip-card-front bg-backgroundLightAccent">
+        <div class="flip-card-front bg-backgroundAccent">
             @if($recipe->image_path)
             <img src="{{ asset('storage/' . $recipe->image_path) }}" alt="{{ $recipe->title }}" class="w-full h-full object-cover rounded-lg">
             @endif
-            <div class="absolute bottom-0 left-0 w-full bg-backgroundLightAccent bg-opacity-75 p-4 rounded-b-lg">
+            <div class="absolute bottom-0 left-0 w-full bg-backgroundAccent bg-opacity-75 p-4 rounded-b-lg">
                 <h3 class="font-semibold">{{ $recipe->title }}</h3>
             </div>
         </div>
-        <div class="flip-card-back p-4 flex flex-col justify-between bg-backgroundLightAccent">
+        <div class="flip-card-back p-4 flex flex-col justify-between bg-backgroundAccent">
             <div>
                 <h3 class="font-semibold ">{{ $recipe->title }}</h3>
                 <p class=" mt-2">{{ $recipe->description }}</p>

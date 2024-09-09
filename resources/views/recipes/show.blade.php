@@ -14,7 +14,7 @@
                 <h1 class="text-3xl font-semibold text-green-600 flex-1">{{ $recipe->title }}</h1>
             </div>
 
-            <div class="bg-backgroundLightAccent p-4 rounded-lg mb-6 flex justify-between">
+            <div class="bg-backgroundAccent p-4 rounded-lg mb-6 flex justify-between">
                 <div class="text-lg"><strong>Serving Size:</strong> {{ $recipe->serving_size }}</div>
                 <div class="text-lg"><strong>Cook Time:</strong> {{ $recipe->cook_time }} minutes</div>
             </div>
