@@ -1,1 +1,1 @@
-<p class="text-text"> {{ $slot }} </p>
+<p {{ $attributes->merge(['class' => 'text-lg text-text']) }}> {{ $slot }} </p>

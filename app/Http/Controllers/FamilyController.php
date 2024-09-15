@@ -8,6 +8,15 @@ use Illuminate\Support\Facades\Auth;
 
 class FamilyController extends Controller
 {
+
+    public function index()
+    {
+        $user = Auth::user();
+        $families = $user->getFamilies()->wherePivot('approved', false)->get();
+        $approvedFamilies = $user->getFamilies()->wherePivot('approved', true)->get();
+        return view('families.index', compact('families', 'approvedFamilies'));
+    }
+
     public function create()
     {
         return view('families.create');
@@ -32,8 +41,7 @@ class FamilyController extends Controller
     public function showJoinForm()
     {
         $user = Auth::user();
-        $approvedFamilies = $user->families()->wherePivot('approved', true)->pluck('families.id');
-        $families = Family::whereNotIn('id', $approvedFamilies)->get();
+        $families = $user->getFamilies()->wherePivot('approved', true)->get();
 
         return view('families.join', compact('families'));
     }
@@ -56,8 +64,9 @@ class FamilyController extends Controller
         return redirect()->route('recipes.index')->with('success', 'Request to join family sent.');
     }
 
-    public function manageMembers($familyId)
+    public function editFamily(Request $request)
     {
+        $familyId = $request->input('id');
         $family = Family::with(['members' => function ($query) {
             $query->orderBy('pivot_approved');
         }])->findOrFail($familyId);
@@ -69,8 +78,9 @@ class FamilyController extends Controller
         $pendingMembers = $family->members->where('pivot.approved', false);
         $approvedMembers = $family->members->where('pivot.approved', true);
 
-        return view('families.manage', compact('family', 'pendingMembers', 'approvedMembers'));
+        return view('families.edit', compact('family', 'pendingMembers', 'approvedMembers'));
     }
+
 
     public function approveMember(Request $request, $familyId, $userId)
     {

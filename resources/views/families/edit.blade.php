@@ -1,10 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2>
-            {{ __('Manage Family Members') }} - {{ $family->name }}
-        </h2>
+        <div class="flex items-center justify-between">
+            <x-fonts.sub-header>
+                {{ __('Manage Family') }} - {{ $family->name }}
+            </x-fonts.sub-header>
+        </div>
     </x-slot>
-
     <x-container>
         <div>
             <h1 class="mb-8">Family Name: {{ $family->name }}</h1>

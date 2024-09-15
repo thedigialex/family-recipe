@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <link rel="icon" href="{{ asset('recipe-logo.png') }}" type="image/x-icon">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -17,13 +18,12 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-background">
+    <div class="min-h-screen bg-backgroundAccent">
         @include('layouts.navigation')
-
         <main>
             @if (isset($header))
-            <header class="bg-secondary shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <header class="bg-background shadow">
+                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
             </header>

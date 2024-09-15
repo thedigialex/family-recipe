@@ -1,12 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2>
+            <x-fonts.sub-header>
                 {{ __('Recipes') }}
-            </h2>
-            <x-primary-button onclick="window.location='{{ route('recipes.create') }}'">
-                Create Recipe
-            </x-primary-button>
+            </x-fonts.sub-header>
+
+            <a href="{{ route('recipes.create') }}">
+                <x-primary-button> Create Recipe</x-primary-button>
+            </a>
         </div>
     </x-slot>
 
@@ -26,18 +27,23 @@
             </div>
             @endif
 
-            @if ($recipes->isEmpty())
+            @foreach ($familiesWithRecipes as $family)
+            <x-fonts.sub-header>{{ $family->name }}'s Recipes</x-fonts.sub-header>
+
+            @if ($family->recipes->isEmpty())
             <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4" role="alert">
                 <strong class="font-bold">Notice:</strong>
-                <span class="block sm:inline">There are no recipes at the moment. Please add a new recipe.</span>
+                <span class="block sm:inline">There are no recipes for {{ $family->name }}. Please add a new recipe.</span>
             </div>
             @else
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach($recipes as $recipe)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                @foreach($family->recipes as $recipe)
                 <x-recipe-card :recipe="$recipe" />
                 @endforeach
             </div>
             @endif
+            @endforeach
+
         </div>
     </x-container>
 </x-app-layout>

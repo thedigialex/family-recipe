@@ -45,7 +45,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function families()
+    public function getFamilies()
     {
         return $this->belongsToMany(Family::class)->withPivot('approved');
     }

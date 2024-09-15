@@ -1,25 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2>
-            {{ __('Profile') }}
-        </h2>
+        <div class="flex items-center justify-between">
+            <x-fonts.sub-header>
+                {{ __('Profile') }}
+            </x-fonts.sub-header>
+        </div>
     </x-slot>
 
     <x-container>
-        <div class="max-w-xl">
-            @include('profile.partials.update-profile-information-form')
-        </div>
+        @include('profile.partials.update-profile-information-form')
     </x-container>
 
     <x-container>
-        <div class="max-w-xl">
-            @include('profile.partials.update-password-form')
-        </div>
+        @include('profile.partials.update-password-form')
     </x-container>
 
     <x-container>
-        <div class="max-w-xl">
-            @include('profile.partials.delete-user-form')
-        </div>
+        @include('profile.partials.delete-user-form')
     </x-container>
 </x-app-layout>

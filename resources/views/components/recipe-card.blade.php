@@ -1,36 +1,5 @@
 @props(['recipe'])
 
-<style>
-    .flip-card {
-        perspective: 1000px;
-    }
-
-    .flip-card-inner {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        transition: transform 0.6s;
-        transform-style: preserve-3d;
-    }
-
-    .flip-card:hover .flip-card-inner {
-        transform: rotateY(180deg);
-    }
-
-    .flip-card-front,
-    .flip-card-back {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        backface-visibility: hidden;
-        border-radius: 0.75rem;
-    }
-
-    .flip-card-back {
-        transform: rotateY(180deg);
-    }
-</style>
-
 <div class="flip-card w-full h-80 rounded-lg overflow-hidden duration-300">
     <div class="flip-card-inner">
         <div class="flip-card-front bg-backgroundAccent">
@@ -38,17 +7,19 @@
             <img src="{{ asset('storage/' . $recipe->image_path) }}" alt="{{ $recipe->title }}" class="w-full h-full object-cover rounded-lg">
             @endif
             <div class="absolute bottom-0 left-0 w-full bg-backgroundAccent bg-opacity-75 p-4 rounded-b-lg">
-                <h3 class="font-semibold">{{ $recipe->title }}</h3>
+                <x-fonts.accent-header class="font-semibold">{{ $recipe->title }}</x-fonts.accent-header>
             </div>
         </div>
         <div class="flip-card-back p-4 flex flex-col justify-between bg-backgroundAccent">
             <div>
-                <h3 class="font-semibold ">{{ $recipe->title }}</h3>
-                <p class=" mt-2">{{ $recipe->description }}</p>
+                <x-fonts.accent-header>{{ $recipe->title }}</x-fonts.accent-header>
+                <x-fonts.paragraph class=" mt-2">{{ $recipe->description }}</x-fonts.paragraph>
             </div>
-            <x-secondary-button onclick="window.location='{{ route('recipes.show', $recipe) }}'">
-                View Recipe
-            </x-secondary-button>
+            <form action="{{ route('recipes.show') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id" value="{{ $recipe->id }}">
+                <x-secondary-button type="submit" class="w-full">View Recipe</x-secondary-button>
+            </form>
         </div>
     </div>
 </div>

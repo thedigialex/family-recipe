@@ -4,124 +4,137 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Recipe;
-use App\Models\Family;
 use Illuminate\Support\Facades\Auth;
 
 class RecipeController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-        $families = $user->families()->wherePivot('approved', true)->get();
-        $recipes = Recipe::whereIn('family_id', $families->pluck('id'))->get();
-
-        return view('recipes.index', compact('recipes'));
+        return view('recipes.index', ['familiesWithRecipes' => $this->getFamiliesWithRecipes()]);
     }
 
-    public function show(Recipe $recipe)
+    public function show(Request $request)
     {
-        return view('recipes.show', compact('recipe'));
+        $recipe = Recipe::findOrFail($request->input('id'));
+        $showEditButton = $this->canEditRecipe($recipe);
+
+        if (!$this->userBelongsToFamily($recipe->family_id)) {
+            return redirect()->route('recipes.index');
+        }
+
+        return view('recipes.show', compact('recipe', 'showEditButton'));
     }
 
     public function create()
     {
-        $user = Auth::user();
-        $families = $user->families()->wherePivot('approved', true)->get();
-
+        $families = $this->getApprovedFamilies();
         if ($families->isEmpty()) {
             return redirect()->route('families.create')->with('error', 'You must join or create a family before creating a recipe.');
         }
 
-        $recipe = new Recipe();
-
-        return view('recipes.form', compact('families', 'recipe'));
+        return view('recipes.form', ['families' => $families, 'recipe' => new Recipe()]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'serving_size' => 'required',
-            'cook_time' => 'required',
-            'ingredients' => 'required',
-            'description' => 'required',
-            'instructions' => 'required',
-            'family_id' => 'required|exists:families,id',
-            'image' => 'nullable|image|max:2048',
-        ]);
+        $validatedData = $this->validateRecipe($request);
+        $imagePath = $this->storeImage($request);
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('recipe_images', 'public');
-        }
-
-        Recipe::create([
-            'title' => $request->title,
-            'serving_size' => $request->serving_size,
-            'cook_time' => $request->cook_time,
-            'ingredients' => $request->ingredients,
-            'description' => $request->description,
-            'instructions' => $request->instructions,
+        Recipe::create(array_merge($validatedData, [
             'image_path' => $imagePath,
             'user_id' => Auth::id(),
-            'family_id' => $request->family_id,
-        ]);
+        ]));
 
         return redirect()->route('recipes.index')->with('success', 'Recipe created successfully.');
     }
 
-    public function edit(Recipe $recipe)
+    public function edit(Request $request)
     {
-        $user = Auth::user();
-        $families = $user->families()->wherePivot('approved', true)->get();
+        $recipe = Recipe::findOrFail($request->input('id'));
 
-        return view('recipes.form', compact('recipe', 'families'));
-    }
-
-    public function update(Request $request, Recipe $recipe)
-    {
-        $request->validate([
-            'title' => 'required',
-            'serving_size' => 'required',
-            'cook_time' => 'required',
-            'ingredients' => 'required',
-            'description' => 'required',
-            'instructions' => 'required',
-            'family_id' => 'required|exists:families,id',
-            'image' => 'nullable|image|max:2048',
-        ]);
-
-        $imagePath = $recipe->image_path;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('recipe_images', 'public');
+        if (!$this->canEditRecipe($recipe)) {
+            return redirect()->route('recipes.index')->with('error', 'You are not authorized to edit this recipe.');
         }
 
-        $recipe->update([
-            'title' => $request->title,
-            'serving_size' => $request->serving_size,
-            'cook_time' => $request->cook_time,
-            'ingredients' => $request->ingredients,
-            'description' => $request->description,
-            'instructions' => $request->instructions,
-            'image_path' => $imagePath,
-            'family_id' => $request->family_id,
-        ]);
+        return view('recipes.form', ['recipe' => $recipe, 'families' => $this->getApprovedFamilies()]);
+    }
+
+    public function update(Request $request)
+    {
+        $validatedData = $this->validateRecipe($request);
+        $recipe = Recipe::findOrFail($request->id);
+        $imagePath = $this->storeImage($request, $recipe->image_path);
+
+        $recipe->update(array_merge($validatedData, ['image_path' => $imagePath]));
 
         return redirect()->route('recipes.index')->with('success', 'Recipe updated successfully.');
     }
 
     public function destroy(Recipe $recipe)
     {
-        if ($recipe->user_id != Auth::id()) {
+        if (!$this->canEditRecipe($recipe)) {
             return redirect()->route('recipes.index')->with('error', 'You are not authorized to delete this recipe.');
         }
-
-        if ($recipe->image_path) {
-            \Storage::disk('public')->delete($recipe->image_path);
-        }
-
+        $this->deleteImage($recipe->image_path);
         $recipe->delete();
 
         return redirect()->route('recipes.index')->with('success', 'Recipe deleted successfully.');
+    }
+
+    private function validateRecipe(Request $request)
+    {
+        return $request->validate([
+            'title' => 'required',
+            'serving_size' => 'required',
+            'cook_time' => 'required',
+            'ingredients' => 'required',
+            'description' => 'required',
+            'instructions' => 'required',
+            'family_id' => 'required|exists:families,id',
+            'image' => 'nullable|image|max:2048',
+        ]);
+    }
+
+    private function storeImage(Request $request, $existingImagePath = null)
+    {
+        if ($request->hasFile('image')) {
+            if ($existingImagePath) {
+                \Storage::disk('public')->delete($existingImagePath);
+            }
+            return $request->file('image')->store('recipe_images', 'public');
+        }
+
+        return $existingImagePath;
+    }
+
+    private function deleteImage($imagePath)
+    {
+        if ($imagePath) {
+            \Storage::disk('public')->delete($imagePath);
+        }
+    }
+
+    private function getApprovedFamilies()
+    {
+        return Auth::user()->getFamilies()->wherePivot('approved', true)->get();
+    }
+
+    private function getFamiliesWithRecipes()
+    {
+        return $this->getApprovedFamilies()->map(function ($family) {
+            $family->recipes = $family->recipes()->get();
+            return $family;
+        });
+    }
+
+    private function canEditRecipe(Recipe $recipe)
+    {
+        $user = Auth::user();
+        return $recipe->user_id == $user->id || $recipe->family->head_id == $user->id;
+    }
+
+    private function userBelongsToFamily($familyId)
+    {
+        return $this->getApprovedFamilies()->contains('id', $familyId);
     }
 }
