@@ -28,13 +28,9 @@ class RecipeController extends Controller
     public function create()
     {
         $families = $this->getApprovedFamilies();
-        if ($families->isEmpty()) {
-            return redirect()->route('families.create')->with('error', 'You must join or create a family before creating a recipe.');
-        }
-
         return view('recipes.form', ['families' => $families, 'recipe' => new Recipe()]);
     }
-
+    
     public function store(Request $request)
     {
         $validatedData = $this->validateRecipe($request);

@@ -119,11 +119,12 @@ class FamilyController extends Controller
         if ($family->head_id != Auth::id()) {
             return redirect()->route('home')->with('error', 'You are not authorized to delete this family.');
         }
+        $family->recipes()->delete();
 
         $family->members()->detach();
 
         $family->delete();
 
-        return redirect()->route('recipes.index')->with('success', 'Family deleted successfully.');
+        return redirect()->route('recipes.index')->with('success', 'Family and associated recipes deleted successfully.');
     }
 }

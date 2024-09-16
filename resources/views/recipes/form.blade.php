@@ -9,12 +9,21 @@
 
     <x-container>
         <div>
-            @if(session('success'))
-            <div class="alert alert-success mb-4">
-                {{ session('success') }}
+            <!-- Check if families are available -->
+            @if($families->isEmpty())
+            <div class="alert alert-warning mb-4">
+                <x-fonts.paragraph>You must join or create a family before creating a recipe.</x-fonts.paragraph>
             </div>
-            @endif
-
+            <!-- Redirect Button to the Families Page -->
+            <div class="flex justify-center">
+                <a href="{{ route('families.index') }}">
+                    <x-secondary-button>
+                        Go to Family Page
+                    </x-secondary-button>
+                </a>
+            </div>
+            @else
+            <!-- Recipe Form -->
             <form action="{{ $recipe->exists ? route('recipes.update') : route('recipes.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @if($recipe->exists)
@@ -33,8 +42,10 @@
                             <x-fonts.input-label for="title">Title:</x-fonts.input-label>
                             <x-inputs.text-input type="text" name="title" id="title" value="{{ old('title', $recipe->title) }}" required></x-inputs.text-input>
                         </div>
+
                         <x-fonts.input-label for="image">Recipe Image:</x-fonts.input-label>
                         <input type="file" name="image" id="image">
+
                         <div class="mb-4 flex space-x-4">
                             <div class="flex-1">
                                 <x-fonts.input-label for="family_id">Family:</x-fonts.input-label>
@@ -88,6 +99,7 @@
                     </button>
                 </form>
             </div>
+            @endif
             @endif
         </div>
     </x-container>

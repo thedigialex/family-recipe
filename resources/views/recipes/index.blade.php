@@ -10,7 +10,7 @@
             </a>
         </div>
     </x-slot>
-
+    @if (!$familiesWithRecipes->isEmpty())
     <x-container>
         <div>
             @if (session('success'))
@@ -28,22 +28,24 @@
             @endif
 
             @foreach ($familiesWithRecipes as $family)
-            <x-fonts.sub-header>{{ $family->name }}'s Recipes</x-fonts.sub-header>
+                <x-fonts.sub-header>{{ $family->name }}'s Recipes</x-fonts.sub-header>
 
-            @if ($family->recipes->isEmpty())
-            <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <strong class="font-bold">Notice:</strong>
-                <span class="block sm:inline">There are no recipes for {{ $family->name }}. Please add a new recipe.</span>
-            </div>
-            @else
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                @foreach($family->recipes as $recipe)
-                <x-recipe-card :recipe="$recipe" />
-                @endforeach
-            </div>
-            @endif
+                @if ($family->recipes->isEmpty())
+                <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Notice:</strong>
+                    <span class="block sm:inline">There are no recipes for {{ $family->name }}. Please add a new recipe.</span>
+                </div>
+                @else
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    @foreach($family->recipes as $recipe)
+                        <x-recipe-card :recipe="$recipe" />
+                    @endforeach
+                </div>
+                @endif
             @endforeach
 
         </div>
     </x-container>
+@endif
+
 </x-app-layout>
