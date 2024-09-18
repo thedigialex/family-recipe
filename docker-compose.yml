@@ -5,18 +5,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ${APP_CONTAINER_NAME:-laravel_app}
-    env_file:
-      - .env
-    volumes:
-      - .:/var/www/html
+    image: family-recipe
+    container_name: family-recipe
+    restart: unless-stopped
     ports:
-      - "${APP_PORT:-9000}:9000"
-    networks:
-      - laravel_network
-    depends_on:
-      - db
+      - "8006:80"
+    volumes:
+      - ./:/var/www/html
 
 networks:
-  laravel_network:
+  default:
     driver: bridge
